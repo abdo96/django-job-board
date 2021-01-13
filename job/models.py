@@ -20,8 +20,17 @@ class Job(models.Model): # table
     Vacancy = models.IntegerField(default=1)
     Salary = models.IntegerField(default=0)
     experience = models.IntegerField(default=1)
-
+    category = models.ForeignKey('Category',on_delete=models.CASCADE)
+    # if the model is coming before we can call the class
+    # in foriegn but if the class is after we can call it by
+    # single quotes
 
     def __str__(self):
           return self.title
      
+class Category(models.Model):
+    name = models.CharField(max_length=25)
+
+
+    def __str__(self):
+        return self.name
