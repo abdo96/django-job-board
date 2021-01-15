@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     #my apps
     'job',
+    'bootstrap4',
+
 ]
 
 MIDDLEWARE = [
@@ -57,7 +59,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,3 +130,4 @@ STATICFILES_DIRS = [
 ]
 MEDIA_URL = '/media/'
 
+MEDIA_ROOT = BASE_DIR / "media"

@@ -1,16 +1,24 @@
 from django.db import models
-
+from django.utils.text import slugify
 # Create your models here.
-
+from django.contrib.auth.models import User
 '''
  why the django give you the model field:
      1 - html idget
      2 - validation
      3- db size 
-'''      
-JOB_TYPE = (('full_time','Full_time'),
-            ('part_time','Part_time'))
+'''     
+#
+JOB_TYPE = (('Full_time','Full time'),
+            ('Part_time','Part time'))
+
+# this function changes the name of the file
+def image_upload(instance,filename):
+     filename, extension = filename.split(".")
+     return "jobs/%s.%s"%(instance.id,extension)
+                  
 class Job(models.Model): # table 
+    owner = models.ForeignKey(User,related_name='job_owner',on_delete=models.CASCADE)
     title = models.CharField(max_length=100) #column
     # job_type
     job_type = models.CharField(max_length=15,choices=JOB_TYPE)
@@ -24,13 +32,29 @@ class Job(models.Model): # table
     # if the model is coming before we can call the class
     # in foriegn but if the class is after we can call it by
     # single quotes
+    image = models.ImageField(upload_to=image_upload)
+    slug = models.SlugField(blank=True,null=True)
+
+    def save(self,*args,**kwargs):
+        self.slug = slugify(self.title)
+        super(Job,self).save(*args,**kwargs)
 
     def __str__(self):
           return self.title
      
 class Category(models.Model):
     name = models.CharField(max_length=25)
-
-
     def __str__(self):
         return self.name
+class Apply(models.Model):
+    job = models.ForeignKey(Job,related_name='apply_job',on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    email =  models.EmailField(max_length=100)
+    website = models.URLField()
+    cv = models.FileField(upload_to='apply/')
+    cover_letter = models.TextField(max_length=500)
+    created_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.name
+
+
