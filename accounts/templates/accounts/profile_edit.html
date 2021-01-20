@@ -1,0 +1,8 @@
+ {% extends "base_generic.html" %} {% load bootstrap4 %} {% block content %}
+<h4>Edit Profile</h4>
+<form method="POST">
+    {% csrf_token %} {% bootstrap_form userform %} {% bootstrap_form profileform %}
+    <input type="submit" value="Save" class="boxed-btn3 w-100" />
+</form>
+
+{% endblock content %}
